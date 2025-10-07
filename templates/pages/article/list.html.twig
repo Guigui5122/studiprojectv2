@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<h2>Ma page Articles</h2>
+
+	<h3>
+		Liste des articles
+	</h3>
+
+	{% if articles|length %}
+		{% for article in articles %}
+			<article>
+				<h4>
+					{{ article.title }}</h4>
+				<p>
+					{{ article.content }}</p>
+			</article> 
+		{% endfor %}
+	{% else %}
+		Pas d'articles
+	{% endif %}
+
+
+{% endblock %}
