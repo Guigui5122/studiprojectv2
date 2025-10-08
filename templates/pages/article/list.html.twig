@@ -10,11 +10,16 @@
 	{% if articles|length %}
 		{% for article in articles %}
 			<article>
+			
 				<h4>
 					{{ article.title }}</h4>
 				<p>
 					{{ article.content }}</p>
-			</article> 
+					
+				<h4>{{ article.state}}
+				</h4>
+
+			</article>
 		{% endfor %}
 	{% else %}
 		Pas d'articles

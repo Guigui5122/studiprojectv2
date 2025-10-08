@@ -23,7 +23,9 @@ class Article
     #[ORM\Column]
     private ?string $state = 'DRAFT';
 
-
+    #[ORM\Column]
+    private bool $sensible = false;
+    
 
 
     public function getId(): ?int
@@ -71,6 +73,26 @@ class Article
     public function setState($state): static
     {
         $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of sensible
+     */ 
+    public function isSensible(): bool
+    {
+        return $this->sensible;
+    }
+
+    /**
+     * Set the value of sensible
+     *
+     * @return  self
+     */ 
+    public function setSensible(bool $sensible): static
+    {
+        $this->sensible = $sensible;
 
         return $this;
     }
