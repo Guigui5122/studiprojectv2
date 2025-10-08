@@ -20,6 +20,12 @@ class Article
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $content = null;
 
+    #[ORM\Column]
+    private ?string $state = 'DRAFT';
+
+
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +51,26 @@ class Article
     public function setContent(?string $content): static
     {
         $this->content = $content;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of state
+     */ 
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * Set the value of state
+     *
+     * @return  self
+     */ 
+    public function setState($state): static
+    {
+        $this->state = $state;
 
         return $this;
     }
