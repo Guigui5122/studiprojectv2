@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Form\ArticleType;
 use App\Entity\Article;
+use App\Service\Form\FormHandler;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 
 #[Route('/article', name: 'article_')]
@@ -25,47 +27,57 @@ class ArticleController extends AbstractController
 
 
     #[Route('/create', name: 'create', methods: ['GET', 'POST'])]
-    public function create(Request $request, EntityManagerInterface $em): Response
+    public function create(FormHandler $formHandler): Response
     {
-        $form = $this->createForm(ArticleType::class);
+        return $formHandler->handle(ArticleType::class, $this->generateUrl('article_list'), 'pages/article/create.html.twig');
 
-        $form->handleRequest($request);
+        //* CODE AVANT REGROUPEMENT DANS LE SERVICE 'FORMHANDLER' :
+        // $form = $this->createForm(ArticleType::class);
+        // $form->add('submit', SubmitType::class);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $article = $form->getData();
+        // $form->handleRequest($request);
 
-            $em->persist($article);
-            $em->flush();
+        // if ($form->isSubmitted() && $form->isValid()) {
+        //     $article = $form->getData();
 
-            return $this->redirectToRoute('article_list');
-        }
+        //     $em->persist($article);
+        //     $em->flush();
 
-        return $this->render('pages/article/create.html.twig', [
-            'form' => $form->createView(),
+        //     return $this->redirectToRoute('article_list');
+        // }
 
-        ]);
+        // return $this->render('pages/article/create.html.twig', [
+        //     'form' => $form->createView(),
+
+        // ]);
     }
-    #[Route('edit/{id}', name: 'edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, EntityManagerInterface $em, Article $article)
+
+     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
+    public function edit(FormHandler $formHandler, Article $article): Response
     {
-        $form = $this->createForm(ArticleType::class, $article);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $article = $form->getData();
-
-            $em->persist($article);
-            $em->flush();
-
-            return $this->redirectToRoute('article_list');
-        }
-
-        return $this->render('pages/article/edit.html.twig', [
-            'form' => $form->createView(),
-            'form_errors' =>$form->getErrors(),
-            'article' => $article,
-
-        ]);
+        return $formHandler->handle(ArticleType::class, $this->generateUrl('article_list'), 'pages/article/edit.html.twig', $article);
     }
-}
+   
+        
+        //* CODE AVANT REGROUPEMENT DANS LE SERVICE 'FORMHANDLER' :
+        // $form = $this->createForm(ArticleType::class, $article);
+
+        // $form->handleRequest($request);
+
+        // if ($form->isSubmitted() && $form->isValid()) {
+        //     $article = $form->getData();
+
+        //     $em->persist($article);
+        //     $em->flush();
+
+        //     return $this->redirectToRoute('article_list');
+        // }
+
+        // return $this->render('pages/article/edit.html.twig', [
+        //     'form' => $form->createView(),
+        //     'form_errors' =>$form->getErrors(),
+        //     'article' => $article,
+
+        // ]);
+    }
+

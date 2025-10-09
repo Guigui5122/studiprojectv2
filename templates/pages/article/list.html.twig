@@ -1,31 +1,39 @@
 {% extends 'base.html.twig' %}
-
 {% block body %}
-	<h2>Ma page Articles</h2>
+<div class="container mt-4">
 
-	<h3>
-		Liste des articles
-	</h3>
+	<table class="table-secondary table-bordered border-primary table-sm caption-top">
+	 <caption>Liste des articles</caption>
+		<thead >
+			<tr>
+				<th class="w-50 p-3">Titre</th>
+				<th>Etat</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for article in articles %}
+				<tr>
+					<td>
+						{{ article.title }}</td>
 
-	{% if articles|length %}
-		{% for article in articles %}
-			<article>
-			
-				<h4>
-					{{ article.title }}</h4>
-				<p>
-					{{ article.content }}</p>
-					
-				<h4>{{ article.state}}
-				</h4>
+					<td>{{ article.state}}
+					</td>
 
-				<a href="{{ path('article_edit', {'id': article.id}) }}"> Modifier </a>
-
-			</article>
-		{% endfor %}
-	{% else %}
-		Pas d'articles
-	{% endif %}
+					<td>
+						<a href="{{ path('article_edit', {'id': article.id}) }}">
+							Modifier
+						</a>
+					</td>
+				</tr>
+			{% else %}
+				⛔ Pas d'articles
+			{% endfor %}
 
 
+		</tbody>
+	</table>
+
+
+</div>
 {% endblock %}
