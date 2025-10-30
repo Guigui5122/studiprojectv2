@@ -5,26 +5,31 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Twig\Environment;
+use App\Service\Email\EmailService;
 
 class FormHandler
 {
     private Request $request;
     private FlashBagInterface $flash;
+    private EmailService $emailService;
+    
 
     public function __construct(
         private EntityManagerInterface $em,
         private FormFactoryInterface $form,
         RequestStack $requestStack,
-        private Environment $twig
+        private Environment $twig,
+        EmailService $emailService
         )
     {
         $this->flash = $requestStack->getSession()->getFlashBag();
         $this->request = $requestStack->getCurrentRequest();
+        $this->emailService = $emailService;
     }
 /**
  * Méthode qui permet de gérer n'importe quel formulaire 
@@ -47,6 +52,8 @@ class FormHandler
 
             $this->em->persist($data);
             $this->em->flush();
+
+            $this->emailService->sendArticleNotification();
 
             if(!$entity){
                 $this->flash->add('success', 'Article enregistré avec succès !');
